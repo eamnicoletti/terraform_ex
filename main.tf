@@ -17,7 +17,7 @@ resource "digitalocean_droplet" "jenkins" {
   name     = "jenkins"
   region   = var.region
   size     = "s-2vcpu-2gb"
-  ssh_keys = [data.digitalocean_ssh_key.jornada.id]
+  ssh_keys = [data.digitalocean_ssh_key.ssh_key.id]
 }
 
 data "digitalocean_ssh_key" "ssh_key" {
@@ -38,16 +38,25 @@ resource "digitalocean_kubernetes_cluster" "k8s" {
 }
 
 variable "do_token" {
-    default = ""
-  
+  default = ""
+
 }
 
 variable "ssh_key_name" {
-    default = "Jornada"
-  
+  default = ""
+
 }
 
 variable "region" {
-    default = "nyc1"
-  
+  default = ""
+
+}
+
+output "jenkins_ip" {
+  value = digitalocean_droplet.jenkins.ipv4_address
+}
+
+resource "local_file" "foo" {
+  content = digitalocean_kubernetes_cluster.k8s.kube_config.0.raw_config
+  filename = "kube_config.yaml"
 }
