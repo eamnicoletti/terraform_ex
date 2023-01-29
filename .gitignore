@@ -1,5 +1,5 @@
 # variables files
-.tfvars
+terraform.tfvars
 
 terraform.tfstate
 
